@@ -1,23 +1,20 @@
 # -*- coding: utf-8 -*-
 ###############################################
-#         Asset Loop Generator for May
-"""
-Features:
-- Procedural Asset curve generation
-- Curve-only or tube generation
-- Width / Height / Depth / Resolution controls
-- Orientation control
-- Twist control
-- Repeat count / spacing
-- Update / Reset / Delete tools
-- Designed to be launched from a Maya shelf button
-
-Usage:
-    import Asset_generator
-    Asset_generator.show()
-"""
+#         Asset Generator  by Thomas Cannon
+#  Features:
+#  - Procedural Asset curve generation using the Math library
+#  - Curve-only or 
+#               tube generation (customizable thickness and material-color)
+#  - Width, Height, Depth, and Resolution controls
+#  - Orientation control using XYZ 
+#  - Repeat count / spacing
+#  - Update / Reset / Delete tools
+#  - Can be launched from a Maya shelf button
+#
+# It can be called from the Script Editor 
+#    import Asset_generator
+#    Asset_generator.show()
 ###############################################
-
 import math
 import maya.cmds as cmds
 from maya import OpenMayaUI as omui
