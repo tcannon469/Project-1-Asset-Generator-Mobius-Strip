@@ -9,7 +9,7 @@
 ##############################################
 import os
 import maya.cmds as cmds
-ProjectFolder = r"C:\Users\Mili\Downloads\AssetGen"
+ProjectFolder = r"Yourpath/AssetGen"
 AssetGenFile = os.path.join(ProjectFolder, "assetgen.py")
 Icon = os.path.join(ProjectFolder, "icons", "infinity_icon.png")
 
