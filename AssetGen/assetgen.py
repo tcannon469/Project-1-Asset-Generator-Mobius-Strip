@@ -1,20 +1,18 @@
-# -*- coding: utf-8 -*-
-###############################################
-#         Asset Generator  by Thomas Cannon
-#  Features:
-#  - Procedural Asset curve generation using the Math library
-#  - Curve-only or 
-#               tube generation (customizable thickness and material-color)
-#  - Width, Height, Depth, and Resolution controls
-#  - Orientation control using XYZ 
-#  - Repeat count / spacing
-#  - Update / Reset / Delete tools
-#  - Can be launched from a Maya shelf button
-#
-# It can be called from the Script Editor 
+#  Thomas Cannon // Project 1: Asset Generator // Mobius Strip
+
+#  Challenge Features(s):
+
+#  math functions, to construct procedural shapes
+#  PySide2 functionality
+#  Multiple UI parameters to construct varying mobius strip shapes
+#  Multiple material types for the generated polygonal shape
+#  Ability to update currently selected generated polygonal shape
+#  Reset parameter changes without quitting UI
+
+#  Call from the script editor 
 #    import Asset_generator
 #    Asset_generator.show()
-###############################################
+
 import math
 import maya.cmds as cmds
 from maya import OpenMayaUI as omui
@@ -26,11 +24,9 @@ except ImportError:
 
 from PySide2 import QtCore, QtWidgets
 
-
 WINDOW_OBJECT_NAME = "AssetGeneratorWindow"
 WINDOW_TITLE = "Asset Generator"
 ROOT_GROUP_NAME = "assetGen_grp"
-
 
 def maya_main_window():
     ptr = omui.MQtUtil.mainWindow()
@@ -38,11 +34,9 @@ def maya_main_window():
         return wrapInstance(int(ptr), QtWidgets.QWidget)
     return None
 
-
 def delete_if_exists(node):
     if node and cmds.objExists(node):
         cmds.delete(node)
-
 
 def get_unique_name(base_name):
     if not cmds.objExists(base_name):
@@ -55,12 +49,10 @@ def get_unique_name(base_name):
             return candidate
         index += 1
 
-
 def ensure_root_group():
     if not cmds.objExists(ROOT_GROUP_NAME):
         return cmds.group(empty=True, name=ROOT_GROUP_NAME)
     return ROOT_GROUP_NAME
-
 
 def rotate_point_for_plane(point, plane):
     x, y, z = point
@@ -73,7 +65,6 @@ def rotate_point_for_plane(point, plane):
         return (y, x, z)
 
     return (x, y, z)
-
 
 class AssetGeneratorCore:
     @staticmethod
@@ -124,7 +115,7 @@ class AssetGeneratorCore:
             normal=normal,
             sections=12
         )[0]
-
+        
     @staticmethod
     def create_material(material_type="Lambert"):
         shader_name = get_unique_name("AssetShader")
@@ -158,7 +149,6 @@ class AssetGeneratorCore:
         for shape in shapes:
             cmds.sets(shape, edit=True, forceElement=shading_group)
 
-    
     @staticmethod
     def create_motion_path(curve, plane, duration=120):
         locator = cmds.spaceLocator(name=get_unique_name("AssetMotion_loc"))[0]
@@ -239,13 +229,11 @@ class AssetGeneratorCore:
                     rotation=0,
                     scale=1
                 )
-
                 cmds.parent(profile, asset_group)
                 cmds.parent(surface, asset_group)
 
                 AssetGeneratorCore.assign_material(surface, shading_group)
                 
-
             if animate:
                 locator, _ = AssetGeneratorCore.create_motion_path(
                     curve,
@@ -255,7 +243,6 @@ class AssetGeneratorCore:
                 cmds.parent(locator, asset_group)
 
         return asset_group
-
 
 class AssetGeneratorUI(QtWidgets.QDialog):
     def __init__(self, parent=maya_main_window()):
@@ -396,8 +383,7 @@ class AssetGeneratorUI(QtWidgets.QDialog):
             "material_type": self.material_combo.currentText(),
             "animate": True, # self.animate_checkbox.isChecked(),
             "animation_length": self.animation_length_spin.value(),
-        }
-
+            }
     def on_generate(self):
         settings = self.get_settings()
         result = AssetGeneratorCore.generate(settings)
@@ -426,7 +412,6 @@ class AssetGeneratorUI(QtWidgets.QDialog):
                 cmds.parent(result, parent)
             except Exception:
                 pass
-
         cmds.select(result)
 
     def on_delete_previous(self):
@@ -436,7 +421,6 @@ class AssetGeneratorUI(QtWidgets.QDialog):
         elif cmds.objExists(ROOT_GROUP_NAME):
             delete_if_exists(ROOT_GROUP_NAME)
 
-
 def close_existing():
     for widget in QtWidgets.QApplication.allWidgets():
         if widget.objectName() == WINDOW_OBJECT_NAME:
@@ -445,7 +429,6 @@ def close_existing():
                 widget.deleteLater()
             except Exception:
                 pass
-
 
 def show():
     close_existing()
