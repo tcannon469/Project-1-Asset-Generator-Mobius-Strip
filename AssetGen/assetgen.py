@@ -24,7 +24,7 @@ try:
 except ImportError:
     from shiboken6 import wrapInstance
 
-from PySide6 import QtCore, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
 
 WINDOW_OBJECT_NAME = "AssetGeneratorWindow"
